@@ -28,48 +28,42 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      sizeX: 0,
-      sizeY: 0,
-      squareColors: [],
-    };
-  },
-  computed: {
-    grid() {
-      const rows = [];
-      for (let i = 0; i < this.sizeY; i++) {
-        const cols = [];
-        for (let j = 0; j < this.sizeX; j++) {
-          cols.push(j);
-        }
-        rows.push(cols);
-      }
-      return rows;
-    },
-  },
-  methods: {
-    resizeGrid() {
-      this.squareColors = [];
-      for (let i = 0; i < this.sizeY; i++) {
-        const cols = [];
-        for (let j = 0; j < this.sizeX; j++) {
-          cols.push(false);
-        }
-        this.squareColors.push(cols);
-      }
-    },
-    toggleSquareColor(rowIndex, colIndex) {
-      this.squareColors[rowIndex][colIndex] =
-        !this.squareColors[rowIndex][colIndex];
-    },
-  },
-  created() {
-    this.resizeGrid();
-  },
+<script setup>
+import { computed, onMounted, ref } from "vue";
+
+const sizeX = ref(0);
+const sizeY = ref(0);
+const squareColors = ref([]);
+
+const grid = computed(() => {
+  const rows = [];
+  for (let i = 0; i < sizeY.value; i++) {
+    const cols = [];
+    for (let j = 0; j < sizeX.value; j++) {
+      cols.push(j);
+    }
+    rows.push(cols);
+  }
+  return rows;
+});
+
+const resizeGrid = () => {
+  squareColors.value = [];
+  for (let i = 0; i < sizeY.value; i++) {
+    const cols = [];
+    for (let j = 0; j < sizeX.value; j++) {
+      cols.push(false);
+    }
+    squareColors.value.push(cols);
+  }
 };
+
+const toggleSquareColor = (rowIndex, colIndex) => {
+  squareColors.value[rowIndex][colIndex] =
+    !squareColors.value[rowIndex][colIndex];
+};
+
+onMounted(resizeGrid);
 </script>
 
 <style scoped>
